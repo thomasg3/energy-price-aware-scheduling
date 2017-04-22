@@ -99,18 +99,19 @@ def convert_to_value_or_null(value):
 
 
 def export(predictions, ml_name, day, instance):
-    prediction_export_location = "predictions"
-    if not os.path.isdir(prediction_export_location):
-        os.makedirs(prediction_export_location)
-    file_location = os.path.join(prediction_export_location, "{0}-{1}.csv".format(ml_name, day))
-    data = [{'time_slot': i, 'actual': predictions.actual_values[i], 'forecasted': predictions.prediction_values[i]} for
-            i in range(len(predictions.actual_values))]
-    fields = ['time_slot', 'forecasted', 'actual']
-    with open(file_location, 'w') as export_file:
-        writer = csv.DictWriter(export_file, fieldnames=fields, dialect='excel')
-        writer.writeheader()
-        for d in data:
-            writer.writerow(d)
+    # prediction_export_location = "predictions"
+    # if not os.path.isdir(prediction_export_location):
+    #     os.makedirs(prediction_export_location)
+    # file_location = os.path.join(prediction_export_location, "{0}-{1}.csv".format(ml_name, day))
+    # data = [{'time_slot': i, 'actual': predictions.actual_values[i], 'forecasted': predictions.prediction_values[i]} for
+    #         i in range(len(predictions.actual_values))]
+    # fields = ['time_slot', 'forecasted', 'actual']
+    # with open(file_location, 'w') as export_file:
+    #     writer = csv.DictWriter(export_file, fieldnames=fields, dialect='excel')
+    #     writer.writeheader()
+    #     for d in data:
+    #         writer.writerow(d)
+    pass
 
 
 class Prediction:

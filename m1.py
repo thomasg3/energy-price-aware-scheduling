@@ -39,7 +39,7 @@ def test_models_and_save_results(models, file_name):
             evaluation = prediction.evaluate()
             spearman_result.append(evaluation['spearman'])
             mae_result.append(evaluation['mae'])
-        run_time = time.time() - start_ti
+        run_time = time.time() - start_time
         results.append({
             'name': name,
             'run_time': run_time,

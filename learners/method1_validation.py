@@ -108,9 +108,9 @@ def make_m1_mlp_function_base_line():
 
 
 def iterate_mlp_m1():
-    hidden_layers = [(200,)]
-    activations = ["relu", 'tanh']
-    alphas = [1e-4]
+    hidden_layers = [(10 * (2 ** i),) for i in range(7)]
+    activations = ["identity", "logistic", "relu", 'tanh']
+    alphas = [10 ** i for i in range(-8, 8)]
 
     for h in hidden_layers:
         for ac in activations:

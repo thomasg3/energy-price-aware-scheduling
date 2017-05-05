@@ -42,9 +42,9 @@ def main(random_seed, save_location):
             # instance.plot()
 
             file_name = 'day'
-            if day < 9:
+            if day < 10:
                 file_name += '00'+str(day)
-            elif day < 99:
+            elif day < 100:
                 file_name += '0'+str(day)
             else:
                 file_name += str(day)

@@ -27,11 +27,12 @@ model_count = {}
 
 def add_to_model_count(method, model):
     if method not in model_count.keys():
-        model_count[method] = {}
+        model_count[method] = {'total': 0}
     if model_count[method].has_key(model):
         model_count[method][model] += 1
     else:
         model_count[method][model] = 1
+    model_count[method]['total'] += 1
 
 
 def m2_spearman_all_feat_300_days(day, prediction_data, instance):
@@ -98,11 +99,17 @@ def m2_random_all_feat_300_days(day, prediction_data, instance):
 
 
 @atexit.register
-def print_model_count():
+def save_model_count():
     data = []
     for method, counts in model_count.iteritems():
-        counts['name'] = method
-        data.append(counts)
+        result = {}
+        for key, count in counts.iteritems():
+            if key == 'total':
+                result['total'] = count
+            else:
+                result[key.__name__] = count
+        result['name'] = method
+        data.append(result)
 
     m2_results = os.path.join("results","m2")
     if not os.path.isdir(m2_results):
@@ -113,7 +120,7 @@ def print_model_count():
               linear.bayesian_regression_all_features_300_days,
               nearest_neighbors.knn_11nn_distance_all_feat_300_days,
               svm.lin_svr_c1e3_all_features_300_days]
-    fields = ['name'] + [model.__name__ for model in models]
+    fields = ['name', 'total'] + [model.__name__ for model in models]
     with open(file_location, 'w') as export_file:
         writer = csv.DictWriter(export_file, fieldnames=fields, dialect='excel')
         writer.writeheader()

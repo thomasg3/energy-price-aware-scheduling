@@ -9,12 +9,12 @@ import numpy as np
 import time
 import csv
 
-number_of_days_to_test = 30
-day_step = 10
+number_of_days_to_test = 365
+day_step = 1
 
 
 def main():
-    # test_models_and_save_results(m1.iterate_random_forest_m1(), 'random_forest.csv')
+    test_models_and_save_results(m1.iterate_random_forest_m1(), 'random_forest.csv')
     test_models_and_save_results(m1.iterate_mlp_m1(), 'mlp.csv')
 
 
@@ -22,7 +22,7 @@ def test_models_and_save_results(models, file_name):
     price_data_location = 'data/prices2013.dat'
     price_data = prices_data.load_prices(price_data_location)
 
-    instance = scheduler.read_instance('instances/load1/day01.txt')
+    instance = scheduler.read_instance('instances/load1/day001.txt')
 
     days = [datetime.strptime('2013-01-01', '%Y-%m-%d').date() + timedelta(days=day_step * i) for i in
             range(number_of_days_to_test)]

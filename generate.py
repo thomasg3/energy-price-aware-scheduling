@@ -8,7 +8,7 @@ import scheduler
 from generator.ICONChallengeGenerator import Instance
 
 number_of_loads = 8
-days_in_load = 14
+days_in_load = 365
 
 time_resolution = 30
 number_of_tasks = 25
@@ -27,7 +27,7 @@ def main(random_seed, save_location):
         if not os.path.isdir(load_location):
             os.makedirs(load_location)
         instances = []
-        number_of_time_outs = 14
+        number_of_time_outs = 100
         time_out = 0
         while len(instances) < days_in_load:
             day = len(instances) + 1
@@ -42,7 +42,12 @@ def main(random_seed, save_location):
             # instance.plot()
 
             file_name = 'day'
-            file_name += str(day) if day > 9 else '0' + str(day)
+            if day < 10:
+                file_name += '00'+str(day)
+            elif day < 100:
+                file_name += '0'+str(day)
+            else:
+                file_name += str(day)
             file_name += '.txt'
 
             file_location = os.path.join(load_location, file_name)

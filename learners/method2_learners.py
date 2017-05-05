@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+import csv
 import core
 import ann
 import ensemble
@@ -20,18 +22,17 @@ column_predict = 'SMPEP2'
 
 simple_preprocessors = [core.interpolate_none]
 
-model_count_spearman = {}
-model_count_spearman_opt = {}
-model_count_mae = {}
-model_count_mae_opt = {}
-model_count_random = {}
+model_count = {}
 
 
-def add_to_model_count(model, counter):
-    if counter.has_key(model):
-        counter[model] += 1
+def add_to_model_count(method, model):
+    if method not in model_count.keys():
+        model_count[method] = {'total': 0}
+    if model_count[method].has_key(model):
+        model_count[method][model] += 1
     else:
-        counter[model] = 1
+        model_count[method][model] = 1
+    model_count[method]['total'] += 1
 
 
 def m2_spearman_all_feat_300_days(day, prediction_data, instance):
@@ -43,7 +44,7 @@ def m2_spearman_all_feat_300_days(day, prediction_data, instance):
     evaluation_day = day - timedelta(days=1)
     results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
     best = max(results, key=lambda m: m[1].evaluate()['spearman'])
-    add_to_model_count(best[0], model_count_spearman)
+    add_to_model_count("spearman", best[0])
     return best[0](day, prediction_data, instance)
 
 
@@ -56,7 +57,7 @@ def m2_spearman_opt_all_feat_300_days(day, prediction_data, instance):
     evaluation_day = day
     results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
     best = max(results, key=lambda m: m[1].evaluate()['spearman'])
-    add_to_model_count(best[0], model_count_spearman_opt)
+    add_to_model_count("spearman_opt", best[0])
     return best[0](day, prediction_data, instance)
 
 
@@ -69,7 +70,7 @@ def m2_mae_all_feat_300_days(day, prediction_data, instance):
     evaluation_day = day - timedelta(days=1)
     results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
     best = max(results, key=lambda m: m[1].evaluate()['mae'])
-    add_to_model_count(best[0], model_count_mae)
+    add_to_model_count("mae"[0])
     return best[0](day, prediction_data, instance)
 
 
@@ -82,7 +83,7 @@ def m2_mae_opt_all_feat_300_days(day, prediction_data, instance):
     evaluation_day = day
     results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
     best = max(results, key=lambda m: m[1].evaluate()['mae'])
-    add_to_model_count(best[0], model_count_mae_opt)
+    add_to_model_count("mae_opt", best[0])
     return best[0](day, prediction_data, instance)
 
 
@@ -93,29 +94,35 @@ def m2_random_all_feat_300_days(day, prediction_data, instance):
               nearest_neighbors.knn_11nn_distance_all_feat_300_days,
               svm.lin_svr_c1e3_all_features_300_days]
     best = random.choice(models)
-    add_to_model_count(best, model_count_random)
+    add_to_model_count("random", best)
     return best(day, prediction_data, instance)
 
 
 @atexit.register
-def print_model_count():
-    if len(model_count_spearman.keys()) > 0:
-        print "Model distribution for m2 Spearman"
-    for model in model_count_spearman.keys():
-        print model.__name__, model_count_spearman[model]
-    if len(model_count_spearman_opt.keys()) > 0:
-        print "Model distribution for m2 Spearman optimal"
-    for model in model_count_spearman_opt.keys():
-        print model.__name__, model_count_spearman_opt[model]
-    if len(model_count_mae.keys()) > 0:
-        print "Model distribution for m2 MAE"
-    for model in model_count_mae.keys():
-        print model.__name__, model_count_mae[model]
-    if len(model_count_mae_opt.keys()) > 0:
-        print "Model distribution for m2 MAE optimal"
-    for model in model_count_mae.keys():
-        print model.__name__, model_count_mae_opt[model]
-    if len(model_count_random.keys()) > 0:
-        print "Model distribution for m2 Random"
-    for model in model_count_random.keys():
-        print model.__name__, model_count_random[model]
+def save_model_count():
+    data = []
+    for method, counts in model_count.iteritems():
+        result = {}
+        for key, count in counts.iteritems():
+            if key == 'total':
+                result['total'] = count
+            else:
+                result[key.__name__] = count
+        result['name'] = method
+        data.append(result)
+
+    m2_results = os.path.join("results","m2")
+    if not os.path.isdir(m2_results):
+        os.makedirs(m2_results)
+    file_location = os.path.join(m2_results, "model_choice.csv")
+    models = [ann.mlp_all_features_300_days,
+              ensemble.random_forest_all_features_300_days,
+              linear.bayesian_regression_all_features_300_days,
+              nearest_neighbors.knn_11nn_distance_all_feat_300_days,
+              svm.lin_svr_c1e3_all_features_300_days]
+    fields = ['name', 'total'] + [model.__name__ for model in models]
+    with open(file_location, 'w') as export_file:
+        writer = csv.DictWriter(export_file, fieldnames=fields, dialect='excel')
+        writer.writeheader()
+        for d in data:
+            writer.writerow(d)

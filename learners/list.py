@@ -62,14 +62,19 @@ learners = {
     'mlp_few_feat_300_days': ann.mlp_few_features_300_days,
     'mlp_basic_feat_300_days': ann.mlp_basic_features_300_days,
     'mlp_all_feat_300_days': ann.mlp_all_features_300_days,
-    # Method 2 learners
-    'm2_spearman_all_feat_300_days': m2.m2_spearman_all_feat_300_days,
-    'm2_spearman_opt_all_feat_300_days': m2.m2_spearman_opt_all_feat_300_days,
-    'm2_mae_all_feat_300_days': m2.m2_mae_all_feat_300_days,
-    'm2_mae_opt_all_feat_300_days': m2.m2_mae_opt_all_feat_300_days,
-    'm2_random_all_feat_300_days': m2.m2_random_all_feat_300_days,
 }
 
 
 def iterator():
     return learners.iteritems()
+
+
+def method2():
+    return {
+        # Method 2 learners
+        'm2_spearman_all_feat_300_days': m2.m2_spearman_all_feat_300_days,
+        'm2_spearman_opt_all_feat_300_days': m2.m2_spearman_opt_all_feat_300_days,
+        'm2_mae_all_feat_300_days': m2.m2_mae_all_feat_300_days,
+        'm2_mae_opt_all_feat_300_days': m2.m2_mae_opt_all_feat_300_days,
+        'm2_random_all_feat_300_days': m2.m2_random_all_feat_300_days,
+    }.iteritems()

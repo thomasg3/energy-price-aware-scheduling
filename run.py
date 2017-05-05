@@ -11,9 +11,7 @@ import summarize as summarizer
 import combine as combiner
 from os import listdir
 
-dates = ["2012-12-01"#, "2013-03-01", "2013-06-01", "2013-09-01"]
-    ]
-
+dates = ["2012-12-01", "2013-03-01", "2013-06-01", "2013-09-01"]
 
 def main(arguments):
     total_start_time = ttime.time()

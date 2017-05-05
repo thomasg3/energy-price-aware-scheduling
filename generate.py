@@ -8,7 +8,7 @@ import scheduler
 from generator.ICONChallengeGenerator import Instance
 
 number_of_loads = 8
-days_in_load = 14
+days_in_load = 1
 
 time_resolution = 30
 number_of_tasks = 25

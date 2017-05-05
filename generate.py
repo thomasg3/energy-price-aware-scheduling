@@ -27,7 +27,7 @@ def main(random_seed, save_location):
         if not os.path.isdir(load_location):
             os.makedirs(load_location)
         instances = []
-        number_of_time_outs = 14
+        number_of_time_outs = 100
         time_out = 0
         while len(instances) < days_in_load:
             day = len(instances) + 1

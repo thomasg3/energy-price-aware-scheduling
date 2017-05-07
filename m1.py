@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import argparse
 import learners.method1_validation as m1
 import scripts.prices_data as prices_data
 import scheduler
@@ -9,22 +10,21 @@ import numpy as np
 import time
 import csv
 
-number_of_days_to_test = 365
-day_step = 1
+
+def main(model, days, day_step, start_day):
+    if 'mlp' in model or not model:
+        test_models_and_save_results(m1.iterate_mlp_m1(), 'mlp.csv', days, day_step, start_day)
+    if 'rf' in model or not model:
+        test_models_and_save_results(m1.iterate_random_forest_m1(), 'random_forest.csv', days, day_step, start_day)
 
 
-def main():
-    test_models_and_save_results(m1.iterate_random_forest_m1(), 'random_forest.csv')
-    test_models_and_save_results(m1.iterate_mlp_m1(), 'mlp.csv')
-
-
-def test_models_and_save_results(models, file_name):
+def test_models_and_save_results(models, file_name, number_of_days_to_test, day_step, start_day):
     price_data_location = 'data/prices2013.dat'
     price_data = prices_data.load_prices(price_data_location)
 
     instance = scheduler.read_instance('instances/load1/day001.txt')
 
-    days = [datetime.strptime('2013-01-01', '%Y-%m-%d').date() + timedelta(days=day_step * i) for i in
+    days = [datetime.strptime(start_day, '%Y-%m-%d').date() + timedelta(days=day_step * i) for i in
             range(number_of_days_to_test)]
 
     results = []
@@ -64,4 +64,13 @@ def test_models_and_save_results(models, file_name):
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser("M1 Validation method")
+
+    parser.add_argument('-m', help="Models to test", default="")
+    parser.add_argument('-d', help="Number of days to test the models on", default=365)
+    parser.add_argument('-s', help="Day Step to take between two test days", default=1)
+    parser.add_argument('--start', help="Start day", default='2013-01-01')
+
+    args = parser.parse_args()
+
+    main(args.m, args.d, args.s, args.start)

@@ -11,11 +11,11 @@ import time
 import csv
 
 
-def main(model, days, day_step, start_day):
+def main(model, days, day_step, start_day, random_forest_args):
     if 'mlp' in model or not model:
         test_models_and_save_results(m1.iterate_mlp_m1(), 'mlp.csv', days, day_step, start_day)
     if 'rf' in model or not model:
-        test_models_and_save_results(m1.iterate_random_forest_m1(), 'random_forest.csv', days, day_step, start_day)
+        test_models_and_save_results(m1.iterate_random_forest_m1(random_forest_args), 'random_forest.csv', days, day_step, start_day)
 
 
 def test_models_and_save_results(models, file_name, number_of_days_to_test, day_step, start_day):
@@ -70,7 +70,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', help="Number of days to test the models on", default=365)
     parser.add_argument('-s', help="Day Step to take between two test days", default=1)
     parser.add_argument('--start', help="Start day", default='2013-01-01')
+    parser.add_argument('--rf', help="Random Forest arguments", default="mse")
 
     args = parser.parse_args()
 
-    main(args.m, args.d, args.s, args.start)
+    main(args.m, args.d, args.s, args.start, args.rf)

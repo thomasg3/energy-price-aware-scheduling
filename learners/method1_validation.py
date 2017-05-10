@@ -53,9 +53,9 @@ def make_m1_random_forest_function_base_line():
     return name, make_prediction
 
 
-def iterate_random_forest_m1():
+def iterate_random_forest_m1(args):
     number_of_estimators = [5 * (2 ** i) for i in range(7)]
-    criterion = ["mse", "mae"]
+    criterion = [args]
     max_features = ["auto", "sqrt", "log2", 0.1, 0.5, 0.8]
     max_depth = [None] + [2 * i for i in range(1, 10)]
 

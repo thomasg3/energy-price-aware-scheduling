@@ -12,10 +12,12 @@ from datetime import timedelta
 import atexit
 import random
 
-
-basic_features = ['HolidayFlag', 'DayOfWeek', 'PeriodOfDay', 'ForecastWindProduction', 'SystemLoadEA', 'SMPEA']
-all_features = ['HolidayFlag', 'DayOfWeek', 'WeekOfYear', 'Day', 'Month', 'Year', 'PeriodOfDay',
-                'ForecastWindProduction', 'SystemLoadEA', 'SMPEA', 'ORKTemperature', 'ORKWindspeed',
+basic_features = ['HolidayFlag', 'DayOfWeek', 'PeriodOfDay',
+                  'ForecastWindProduction', 'SystemLoadEA', 'SMPEA']
+all_features = ['HolidayFlag', 'DayOfWeek', 'WeekOfYear', 'Day', 'Month',
+                'Year', 'PeriodOfDay',
+                'ForecastWindProduction', 'SystemLoadEA', 'SMPEA',
+                'ORKTemperature', 'ORKWindspeed',
                 'CO2Intensity', 'ActualWindProduction', 'SystemLoadEP2']
 few_features = ['PeriodOfDay', 'ForecastWindProduction', 'SystemLoadEA']
 column_predict = 'SMPEP2'
@@ -42,22 +44,38 @@ def m2_spearman_all_feat_300_days(day, prediction_data, instance):
               nearest_neighbors.knn_11nn_distance_all_feat_300_days,
               svm.lin_svr_c1e3_all_features_300_days]
     evaluation_day = day - timedelta(days=1)
-    results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
+    results = [(model, model(evaluation_day, prediction_data, instance)) for
+               model in models]
     best = max(results, key=lambda m: m[1].evaluate()['spearman'])
     add_to_model_count("spearman", best[0])
     return best[0](day, prediction_data, instance)
 
 
-def m2_spearman_opt_all_feat_300_days(day, prediction_data, instance):
+def m2_spearman_o3_all_feat_300_days(day, prediction_data, instance):
     models = [ann.mlp_all_features_300_days,
               ensemble.random_forest_all_features_300_days,
               linear.bayesian_regression_all_features_300_days,
               nearest_neighbors.knn_11nn_distance_all_feat_300_days,
               svm.lin_svr_c1e3_all_features_300_days]
-    evaluation_day = day
-    results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
-    best = max(results, key=lambda m: m[1].evaluate()['spearman'])
-    add_to_model_count("spearman_opt", best[0])
+    evaluation_day = day - timedelta(days=1)
+    results = [(model, model(evaluation_day, prediction_data, instance)) for
+               model in models]
+    best = max(results, key=lambda m: m[1].evaluate()['w_spearman_o3'])
+    add_to_model_count("w_spearman_o3", best[0])
+    return best[0](day, prediction_data, instance)
+
+
+def m2_spearman_max_all_feat_300_days(day, prediction_data, instance):
+    models = [ann.mlp_all_features_300_days,
+              ensemble.random_forest_all_features_300_days,
+              linear.bayesian_regression_all_features_300_days,
+              nearest_neighbors.knn_11nn_distance_all_feat_300_days,
+              svm.lin_svr_c1e3_all_features_300_days]
+    evaluation_day = day - timedelta(days=1)
+    results = [(model, model(evaluation_day, prediction_data, instance)) for
+               model in models]
+    best = max(results, key=lambda m: m[1].evaluate()['w_spearman_max'])
+    add_to_model_count("w_spearman_max", best[0])
     return best[0](day, prediction_data, instance)
 
 
@@ -68,22 +86,10 @@ def m2_mae_all_feat_300_days(day, prediction_data, instance):
               nearest_neighbors.knn_11nn_distance_all_feat_300_days,
               svm.lin_svr_c1e3_all_features_300_days]
     evaluation_day = day - timedelta(days=1)
-    results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
+    results = [(model, model(evaluation_day, prediction_data, instance)) for
+               model in models]
     best = max(results, key=lambda m: m[1].evaluate()['mae'])
     add_to_model_count("mae"[0])
-    return best[0](day, prediction_data, instance)
-
-
-def m2_mae_opt_all_feat_300_days(day, prediction_data, instance):
-    models = [ann.mlp_all_features_300_days,
-              ensemble.random_forest_all_features_300_days,
-              linear.bayesian_regression_all_features_300_days,
-              nearest_neighbors.knn_11nn_distance_all_feat_300_days,
-              svm.lin_svr_c1e3_all_features_300_days]
-    evaluation_day = day
-    results = [(model, model(evaluation_day, prediction_data, instance)) for model in models]
-    best = max(results, key=lambda m: m[1].evaluate()['mae'])
-    add_to_model_count("mae_opt", best[0])
     return best[0](day, prediction_data, instance)
 
 
@@ -111,7 +117,7 @@ def save_model_count():
         result['name'] = method
         data.append(result)
 
-    m2_results = os.path.join("results","m2")
+    m2_results = os.path.join("results", "m2")
     if not os.path.isdir(m2_results):
         os.makedirs(m2_results)
     file_location = os.path.join(m2_results, "model_choice.csv")

@@ -8,7 +8,6 @@ import ensemble
 import ann
 import method2_learners as m2
 
-
 learners = {
     # baseline (using SEMO prediction)
     'base_line': bl.base_line,
@@ -72,9 +71,13 @@ def iterator():
 def method2():
     return {
         # Method 2 learners
+        'm1_best_regret': linear.bayesian_regression_all_features_90_days,
+        'm1_best_spearman': linear.bayesian_regression_all_features_300_days,
+        'm1_best_mae': linear.bayesian_regression_basic_features_300_days,
         'm2_spearman_all_feat_300_days': m2.m2_spearman_all_feat_300_days,
-        'm2_spearman_opt_all_feat_300_days': m2.m2_spearman_opt_all_feat_300_days,
+        'm2_spearman_o3_all_feat_300_days': m2.m2_spearman_o3_all_feat_300_days,
+        'm2_spearman_max_all_feat_300_days': m2.m2_spearman_max_all_feat_300_days,
         'm2_mae_all_feat_300_days': m2.m2_mae_all_feat_300_days,
-        'm2_mae_opt_all_feat_300_days': m2.m2_mae_opt_all_feat_300_days,
         'm2_random_all_feat_300_days': m2.m2_random_all_feat_300_days,
+        'base_line': bl.base_line
     }.iteritems()

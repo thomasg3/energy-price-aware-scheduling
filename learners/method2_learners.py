@@ -89,7 +89,7 @@ def m2_mae_all_feat_300_days(day, prediction_data, instance):
     results = [(model, model(evaluation_day, prediction_data, instance)) for
                model in models]
     best = max(results, key=lambda m: m[1].evaluate()['mae'])
-    add_to_model_count("mae"[0])
+    add_to_model_count("mae", best[0])
     return best[0](day, prediction_data, instance)
 
 

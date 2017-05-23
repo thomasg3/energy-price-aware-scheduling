@@ -1,2 +1,1 @@
 name,total,mlp_all_features_300_days,random_forest_all_features_300_days,bayesian_regression_all_features_300_days,knn_11nn_distance_all_feat_300_days,lin_svr_c1e3_all_features_300_days
-spearman,14,4,1,7,,2

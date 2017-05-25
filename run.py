@@ -19,7 +19,7 @@ def main(arguments):
         if not arguments.learner or arguments.learner in ml_name:
             print ">>> " + ml_name
             start_time = ttime.time()
-            loads = ["load" + repr(i) for i in range(4, 9)]
+            loads = ["load1", "load2"] + ["load" + repr(i) for i in range(4, 9)]
             for load in loads:
                 load_start = ttime.time()
                 print ">>> " + load

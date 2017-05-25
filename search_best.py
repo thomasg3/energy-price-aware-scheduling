@@ -45,7 +45,7 @@ def main():
 def dayify(d):
     if d > 99:
         return str(d)
-    elif d > 0:
+    elif d > 9:
         return '0' + str(d)
     else:
         return '00' + str(d)

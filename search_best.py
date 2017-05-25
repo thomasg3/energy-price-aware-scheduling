@@ -37,7 +37,7 @@ def main():
                     difference = bay_regret - svr_regret
 
                     if difference < mini:
-                        min = difference
+                        mini = difference
                         min_string = "{0}-{1}-{2}".format(date, load, day)
     print min_string
 

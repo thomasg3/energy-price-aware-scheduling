@@ -1,0 +1,2 @@
+name,total,mlp_all_features_300_days,random_forest_all_features_300_days,bayesian_regression_all_features_300_days,knn_11nn_distance_all_feat_300_days,lin_svr_c1e3_all_features_300_days
+mae,2,,1,,,1

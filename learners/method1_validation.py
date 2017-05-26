@@ -67,6 +67,42 @@ def iterate_random_forest_m1(args):
     yield make_m1_random_forest_function_base_line()
 
 
+def best_spearman_random_forest(day, prediction_data, instance):
+    n = 160
+    c = "mse"
+    mf = 0.5
+    md = 6
+    _, model = make_m1_random_forest_function(n, c, mf, md)
+    return model(day, prediction_data, instance)
+
+
+def second_spearman_random_forest(day, prediction_data, instance):
+    n = 320
+    c = "mse"
+    mf = 0.5
+    md = 6
+    _, model = make_m1_random_forest_function(n, c, mf, md)
+    return model(day, prediction_data, instance)
+
+
+def best_mae_random_forest(day, prediction_data, instance):
+    n = 80
+    c = "mse"
+    mf = "log2"
+    md = 10
+    _, model = make_m1_random_forest_function(n, c, mf, md)
+    return model(day, prediction_data, instance)
+
+def second_mae_random_forest(day, prediction_data, instance):
+    n = 320
+    c = "mse"
+    mf = "sqrt"
+    md = 10
+    _, model = make_m1_random_forest_function(n, c, mf, md)
+    return model(day, prediction_data, instance)
+
+
+
 # MULTI LAYER PERCEPTRON
 def make_m1_mlp_function(hidden_layer_size, activation, alpha):
     historic_days = 300

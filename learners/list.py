@@ -7,6 +7,7 @@ import nearest_neighbors as nn
 import ensemble
 import ann
 import method2_learners as m2
+import method1_validation as m1
 
 learners = {
     # baseline (using SEMO prediction)
@@ -80,4 +81,18 @@ def method2():
         'm2_mae_all_feat_300_days': m2.m2_mae_all_feat_300_days,
         'm2_random_all_feat_300_days': m2.m2_random_all_feat_300_days,
         'base_line': bl.base_line
+    }.iteritems()
+
+
+def method1_validation():
+    return {
+        'm1_best_regret': linear.bayesian_regression_all_features_90_days,
+        'base_line': bl.base_line,
+        'm1_best_mae': linear.bayesian_regression_basic_features_300_days,
+        'm1_best_spearman': linear.bayesian_regression_all_features_300_days,
+        'val_best_spearman': m1.best_spearman_random_forest,
+        'val_best_mae': m1.best_mae_random_forest,
+        'val_second_spearman': m1.second_spearman_random_forest,
+        'val_second_mae': m1.second_mae_random_forest
+
     }.iteritems()

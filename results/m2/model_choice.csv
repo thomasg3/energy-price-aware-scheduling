@@ -1,0 +1,6 @@
+name,total,mlp_all_features_300_days,random_forest_all_features_300_days,bayesian_regression_all_features_300_days,knn_11nn_distance_all_feat_300_days,lin_svr_c1e3_all_features_300_days
+spearman,2555,551,266,930,135,673
+random,2555,483,501,513,511,547
+mae,2555,326,435,121,652,1021
+w_spearman_o3,2555,547,301,845,145,717
+w_spearman_max,2555,526,268,872,138,751

@@ -86,13 +86,30 @@ def method2():
 
 def method1_validation():
     return {
-        'm1_best_regret': linear.bayesian_regression_all_features_90_days,
-        'base_line': bl.base_line,
-        'm1_best_mae': linear.bayesian_regression_basic_features_300_days,
-        'm1_best_spearman': linear.bayesian_regression_all_features_300_days,
-        'val_best_spearman': m1.best_spearman_random_forest,
-        'val_best_mae': m1.best_mae_random_forest,
-        'val_second_spearman': m1.second_spearman_random_forest,
-        'val_second_mae': m1.second_mae_random_forest
+
+        'val_rf_best_both': m1.make_m1_random_forest_function(
+            n_estimators=320,
+            criterion="mse",
+            max_features=0.5,
+            max_depth=6)[1],
+        'val_rf_second_spear' : m1.make_m1_random_forest_function(
+            n_estimators=320,
+            criterion="mse",
+            max_features="sqrt",
+            max_depth=6)[1],
+        'val_rf_second_mae': m1.make_m1_random_forest_function(
+            n_estimators=320,
+            criterion="mse",
+            max_features="log2",
+            max_depth=6)[1],
+        'val_rf_default': m1.make_m1_mlp_function_base_line()[1],
+        'val_mlp_best_spear': m1.make_m1_mlp_function(
+            hidden_layer_size=(640,),
+            activation="identity",
+            alpha=1e5)[1],
+        'val_mlp_best_mae': m1.make_m1_mlp_function(
+            hidden_layer_size=(640,),
+            activation="relu",
+            alpha=1e-6)[1]
 
     }.iteritems()
